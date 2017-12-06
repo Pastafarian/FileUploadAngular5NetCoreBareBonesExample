@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { catchError, map, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-upload-basic',
+  templateUrl: './upload-basic.component.html',
+  styleUrls: ['./upload-basic.component.scss']
 })
-export class AppComponent {
-  /*
+export class UploadBasicComponent {
+
   file: any;
   fileType = '';
 
@@ -17,7 +15,7 @@ export class AppComponent {
   }
 
   onFileChanged(e) {
-      this.file = e.target.files[0];
+    this.file = e.target.files[0];
   }
 
   upload(event) {
@@ -27,5 +25,5 @@ export class AppComponent {
     this.http.post('http://localhost:61632/api/upload', formData).subscribe(res => {
       console.log(res);
     });
-  }*/
+  }
 }

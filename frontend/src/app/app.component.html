@@ -1,5 +1,7 @@
-<div>
-    <input type="text" [(ngModel)]="fileType" placeholder="File type" />
-    <input type="file" #fileInput (change)="onFileChanged($event)" name="file" />
-    <input type="button" (click)="upload()" value="Upload" />
-</div>
+<nav>
+    <a routerLink="/upload-basic" routerLinkActive="active">Upload Basic</a>
+    <a routerLink="/upload-chunked" routerLinkActive="active">Upload Chunked</a>
+    <a routerLink="/api-post" routerLinkActive="active">Api Post</a>
+</nav>
+
+<router-outlet></router-outlet>
