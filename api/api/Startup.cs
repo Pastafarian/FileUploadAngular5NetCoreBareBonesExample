@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace api
 {
     public class Startup
@@ -33,29 +32,10 @@ namespace api
             {
                 options.MultipartBodyLengthLimit = long.MaxValue;
             });
-
-            /*
-               x.ValueLengthLimit = int.MaxValue;
-            x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
-             *
-             */
-            /*
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder =>
-                    {
-                        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
-                    });
-            });*/
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // Note allow all for cors
-            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod());
-
             app.UseCors("Cors");
             if (env.IsDevelopment())
             {

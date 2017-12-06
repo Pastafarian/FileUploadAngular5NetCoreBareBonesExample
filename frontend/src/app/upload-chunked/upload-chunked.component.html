@@ -1,16 +1,77 @@
 <h1>Upload Chunked</h1>
 
+
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Type</td>
+        <td>File</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+
+<span *ngIf="complete" class="done">
+    <button mat-fab>
+      <mat-icon>check circle</mat-icon>
+    </button>
+  </span>
 <!--
 <div>
     <input type="text" [(ngModel)]="fileType" placeholder="File type" />
     <input type="file" #fileInput (change)="onFileChanged($event)" name="file" />
     <input type="button" (click)="upload()" value="Upload" />
 </div>
+multiple (change)="upload(file.files)"
 -->
 
 {{uploadProgress}}
 
-<input #file type="file" multiple (change)="upload(file.files)" />
+<input #file type="file" (change)="fileChanged(file.files)" />
+
 <span *ngIf="uploadProgress > 0 && uploadProgress < 100">
     {{uploadProgress}}%
 </span>
+<p>Total. <span>{{total}}</span></p>
+<p>Loaded. <span>{{loaded}}</span></p>
+
+<button mat-raised-button color="primary" (click)="upload2()">Upload</button>
+
+<br>
+<br>
+<br>
+<br>
+
+<mat-progress-bar mode="determinate" value="{{uploadProgress}}"></mat-progress-bar>
+
+
+<br>
+<br>
+<br>
+<br>
+<div>
+    <mat-toolbar color="primary">
+        <span><mat-icon>mood</mat-icon></span>
+
+        <span>Yay, Material in Angular 2!</span>
+
+        <button mat-icon-button [mat-menu-trigger-for]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-menu x-position="before" #menu="matMenu">
+        <button mat-menu-item>Option 1</button>
+        <button mat-menu-item>Option 2</button>
+    </mat-menu>
+
+    <mat-card>
+        <button mat-button>All</button>
+        <button mat-raised-button>Of</button>
+        <button mat-raised-button color="primary">The</button>
+        <button mat-raised-button color="accent">Buttons</button>
+    </mat-card>
+</div>

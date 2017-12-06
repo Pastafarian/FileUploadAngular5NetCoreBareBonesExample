@@ -9,12 +9,75 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpEventType } fro
 export class UploadChunkedComponent {
 
   public uploadProgress: number;
+  public total: string;
+  public loaded: string;
+  public files: any;
+  public complete: boolean;
 
   constructor(private http: HttpClient) {
-
     this.uploadProgress = 0;
+    this.total = '0';
+    this.loaded = '0';
+    this.complete = false;
   }
 
+  /*
+  <input #file type="file" (change)="fileChanged(file.files)" />
+  <span *ngIf="uploadProgress > 0 && uploadProgress < 100">
+      {{uploadProgress}}%
+  </span>
+  <p>Total. <span>{{total}}</span></p>
+  <p>Loaded. <span>{{loaded}}</span></p>
+  <button mat-raised-button color="primary" (click)="upload()">Upload</button>
+  */
+
+  fileChanged(files) {
+    this.files = files;
+  }
+
+  upload2() {
+    if (this.files.length === 0) {
+      return;
+    }
+
+    const formData = new FormData();
+
+    for (const file of this.files) {
+      formData.append(file.name, file);
+    }
+
+    const req = new HttpRequest('POST', `http://localhost:61632/api/uploadchunked`, formData, {
+      reportProgress: true,
+    });
+
+    this.http.request(req).subscribe(event => {
+
+      if (event.type === HttpEventType.UploadProgress) {
+        this.total = this.formatNumberToKb(event.total);
+        this.loaded = this.formatNumberToKb(event.loaded);
+        this.uploadProgress = Math.round(100 * event.loaded / event.total);
+
+        if (this.uploadProgress === 100) {
+          this.complete = true;
+        }
+
+      } else {
+        if (event instanceof HttpResponse) {
+          this.complete = true;
+          console.log('Files uploaded!');
+        }
+      }
+    });
+  }
+
+  formatNumberToKb(size: number) {
+    return Intl.NumberFormat().format(parseInt((size / 1024).toFixed(0), 10)) + ' kb';
+  }
+}
+
+
+
+ /*
   upload(files) {
 
     if (files.length === 0) {
@@ -34,6 +97,8 @@ export class UploadChunkedComponent {
     this.http.request(req).subscribe(event => {
 
       if (event.type === HttpEventType.UploadProgress) {
+        this.total = this.formatNumberToKb(event.total);
+        this.loaded = this.formatNumberToKb(event.loaded);
         this.uploadProgress = Math.round(100 * event.loaded / event.total);
       } else {
         if (event instanceof HttpResponse) {
@@ -41,52 +106,4 @@ export class UploadChunkedComponent {
         }
       }
     });
-  }
-
-
-  /*
-    onFileChanged(e) {
-        this.file = e.target.files[0];
-    }
-    upload(event) {
-      const formData: FormData = new FormData();
-      formData.append('type', this.fileType);
-      formData.append('file', this.file);
-      this.http.post('http://localhost:61632/api/UploadChunked', formData).subscribe(res => {
-        console.log(res);
-      });
-    }
-  */
-
-}
-
-
-/*import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-@Component({
-  selector: 'app-upload-basic',
-  templateUrl: './upload-basic.component.html',
-  styleUrls: ['./upload-basic.component.css']
-})
-export class UploadBasicComponent  {
-
-  file: any;
-  fileType = '';
-
-  constructor(private http: HttpClient) {
-  }
-
-  onFileChanged(e) {
-      this.file = e.target.files[0];
-  }
-
-  upload(event) {
-    const formData: FormData = new FormData();
-    formData.append('type', this.fileType);
-    formData.append('file', this.file);
-    this.http.post('http://localhost:61632/api/upload', formData).subscribe(res => {
-      console.log(res);
-    });
-  }
-} */
+  }*/
